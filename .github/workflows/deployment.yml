@@ -39,4 +39,4 @@ jobs:
                 docker pull techindustry/thrive:${{ github.sha }}
                 docker stop thrive
                 docker rm thrive
-                docker run --name thrive -d techindustry/thrive:${{ github.sha }}
+                docker run --name thrive -d -p 6000:3000 techindustry/thrive:${{ github.sha }}

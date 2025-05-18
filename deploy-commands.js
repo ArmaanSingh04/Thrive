@@ -36,7 +36,7 @@ const rest = new REST().setToken(token);
         console.log(`Started refreshing ${commands.length} application (/) commands.`);
 
         const data = await rest.put(
-            // use application commands for global deployment of slash commands
+            // use application commands with clientid for global deployment of slash commands
             // use application guild commands for guild deployment of commands
             Routes.applicationGuildCommands(clientId, guildId),
             { body: commands },
