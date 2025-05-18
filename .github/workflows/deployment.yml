@@ -1,4 +1,4 @@
-name: Deployment backend to production
+name: Deploy and run bot in production
 on:
     push:
         branches: [ main ]
@@ -35,4 +35,4 @@ jobs:
                 docker pull techindustry/thrive:${{ github.sha }}
                 docker stop thive
                 docker rm thive
-                docker run --name thrive -d -e BOT_TOKEN=${{secrets.BOT_TOKEN}} techindustry/thrive:${{ github.sha }}
+                docker run --name thrive -d -e BOT_TOKEN=${{secrets.BOT_TOKEN}} -e DATABASE_URL=${{secrets.DATABASE_URL}} -e GEMINI_API_KEY=${{secrets.GEMINI_API_KEY}} techindustry/thrive:${{ github.sha }}

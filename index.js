@@ -1,13 +1,16 @@
 require('dotenv').config();
 
 const { Client, Collection, GatewayIntentBits } = require('discord.js');
-const fs = require('fs')
-const path = require('path')
+const fs = require('fs');
+const { default: mongoose } = require('mongoose');
+const path = require('path');
+const connectToDatabase = require('./services/db');
 
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.MessageContent
     ]
 })
 
@@ -35,13 +38,20 @@ const eventsPath = path.join(__dirname, 'events');
 const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
 
 for (const file of eventFiles) {
-	const filePath = path.join(eventsPath, file);
-	const event = require(filePath);
-	if (event.once) {
-		client.once(event.name, (...args) => event.execute(...args));
-	} else {
-		client.on(event.name, (...args) => event.execute(...args));
-	}
+    const filePath = path.join(eventsPath, file);
+    const event = require(filePath);
+    if (event.once) {
+        client.once(event.name, (...args) => event.execute(...args));
+    } else {
+        client.on(event.name, (...args) => event.execute(...args));
+    }
+}
+mongoose.connection.once('open', () => {
+    console.log(`MONGODB connected successfully`)
+})
+const main = async () => {
+    client.login(process.env.BOT_TOKEN)
+    await connectToDatabase();
 }
 
-client.login(process.env.BOT_TOKEN)
+main();
