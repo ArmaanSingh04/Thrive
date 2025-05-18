@@ -24,6 +24,10 @@ jobs:
               file: ./Dockerfile
               push: true
               tags: techindustry/thrive:${{ github.sha }}
+              build-args: |
+                BOT_TOKEN=${{ secrets.BOT_TOKEN }}
+                DATABASE_URL=${{ secrets.DATABASE_URL }}
+                GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}
           -
             name: Deploy to the vps
             uses: appleboy/ssh-action@v1.2.1
@@ -35,4 +39,4 @@ jobs:
                 docker pull techindustry/thrive:${{ github.sha }}
                 docker stop thrive
                 docker rm thrive
-                docker run --name thrive -d -e BOT_TOKEN=${{ secrets.BOT_TOKEN }} -e DATABASE_URL=${{ secrets.DATABASE_URL }} -e GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }} techindustry/thrive:${{ github.sha }}
+                docker run --name thrive -d techindustry/thrive:${{ github.sha }}
