@@ -33,6 +33,6 @@ jobs:
               key: ${{ secrets.SSH_PRIVATE_KEY }}
               script: |
                 docker pull techindustry/thrive:${{ github.sha }}
-                docker stop thive
-                docker rm thive
+                docker stop thrive
+                docker rm thrive
                 docker run --name thrive -d -e BOT_TOKEN=${{secrets.BOT_TOKEN}} -e DATABASE_URL=${{secrets.DATABASE_URL}} -e GEMINI_API_KEY=${{secrets.GEMINI_API_KEY}} techindustry/thrive:${{ github.sha }}
