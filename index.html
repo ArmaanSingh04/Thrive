@@ -1,22 +1,270 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thrive - Discord bot</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Context - Discord Conversation Summarizer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background-color: #2d1b69;
+      color: white;
+      line-height: 1.6;
+    }
+
+    .hero-section {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 40px 20px;
+      flex-wrap: wrap;
+    }
+
+    .hero {
+      flex: 1;
+      max-width: 600px;
+      padding: 20px;
+      text-align: left;
+    }
+
+    .logo {
+      width: 120px;
+      height: 120px;
+      background-color: #4b3190;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      font-size: 40px;
+      font-weight: bold;
+      color: white;
+      border: 3px solid #6e48d1;
+    }
+
+    .title {
+      font-size: 3.5rem;
+      font-weight: 800;
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+
+    .subtitle {
+      font-size: 1.5rem;
+      font-weight: 500;
+      margin-bottom: 40px;
+      opacity: 0.9;
+    }
+
+    .cta-button {
+      background-color: #3b82f6;
+      color: white;
+      font-size: 1.1rem;
+      font-weight: 600;
+      padding: 16px 32px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4);
+      display: inline-block;
+    }
+
+    .cta-button:hover {
+      background-color: #2563eb;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(59, 130, 246, 0.5);
+    }
+
+    .video-container {
+      flex: 1;
+      max-width: 600px;
+      padding: 20px;
+    }
+
+    video {
+      width: 100%;
+      height: auto;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .red-text {
+      color: #ef4444;
+    }
+
+    .green-text {
+      color: #10b981;
+    }
+
+    .commands-section {
+      padding: 80px 20px;
+      background-color: #231458;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 50px;
+      text-align: center;
+    }
+
+    .commands-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      justify-content: center;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .command-card {
+      background-color: #341c7a;
+      border-radius: 12px;
+      padding: 30px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .command-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .command-name {
+      font-family: 'Courier New', monospace;
+      background-color: #1e1246;
+      color: #10b981;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      display: inline-block;
+      margin-bottom: 20px;
+    }
+
+    .command-description {
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .command-example {
+      background-color: #1e1246;
+      border-radius: 8px;
+      padding: 15px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      color: #e2e8f0;
+      overflow-x: auto;
+    }
+
+    @media (max-width: 768px) {
+      .hero-section {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .hero,
+      .video-container {
+        max-width: 100%;
+        padding: 10px;
+      }
+
+      .title {
+        font-size: 2.5rem;
+      }
+
+      .subtitle {
+        font-size: 1.2rem;
+      }
+
+      .section-title {
+        font-size: 2rem;
+      }
+    }
+  </style>
 </head>
+
 <body>
-    <div class="bg-purple-950 w-full h-screen text-white flex justify-center items-center">
-      <div class="w-full h-full flex justify-center items-center flex-col text-4xl p-2 gap-3">
-        <p class="text-center text-6xl font-bold">Never miss <span class="text-red-500">out</span> on <span class="text-green-500">Context</span></p>
-        <p class="text-center font-semibold">A Conversation Summarizer for your Discord channels</p>
-        <a href="https://discord.com/oauth2/authorize?client_id=1370482215871316058&permissions=2147552256&integration_type=0&scope=bot+applications.commands
-" target="_blank" class="bg-blue-500 hover:bg-blue-600 text-xl cursor-pointer px-5 py-3 rounded">Add to server</a>
+  <section class="hero-section">
+    <div class="hero">
+      <div class="logo">T</div>
+      <h1 class="title">Never miss <span class="red-text">out</span> on <span class="green-text">Context</span></h1>
+      <p class="subtitle">A Conversation Summarizer for your Discord channels</p>
+      <a href="https://discord.com/oauth2/authorize?client_id=1370482215871316058&permissions=2147552256&integration_type=0&scope=bot+applications.commands"
+        target="_blank" class="cta-button">Add to server</a>
+    </div>
+    <div class="video-container">
+      <video src="./assets/video.mp4" autoplay muted loop playsinline></video>
+    </div>
+  </section>
+
+  <section class="commands-section">
+    <div class="container">
+      <h2 class="section-title">Bot Commands</h2>
+      <div class="commands-container">
+        <div class="command-card">
+          <div class="command-name">/summarize10</div>
+          <p class="command-description">Summarizes the last 10 messages in the current Discord channel, providing you
+            with the key points of the conversation.</p>
+          <div class="command-example">
+            User: /summarize10<br>
+            Bot: 📝 <b>Summary of last 10 messages:</b><br>
+            • John asked about the project deadline<br>
+            • Sarah confirmed it's next Friday<br>
+            • Team discussed feature priorities<br>
+            • Alex shared resources for UI design
+          </div>
+        </div>
+        <div class="command-card">
+          <div class="command-name">/summarize25</div>
+          <p class="command-description">Summarizes the last 25 messages in the current Discord channel, providing you
+            with the key points of the conversation.</p>
+          <div class="command-example">
+            User: /summarize25<br>
+            Bot: 📝 The conversation is about building a Discord bot. l1k3apr0. is advising 2molpani to learn the
+            Discord.js library and read the documentation to help with building the bot. 2molpani is asking how to build
+            a bot for their Discord server and how to learn Discord.js.
+          </div>
+        </div>
+        <div class="command-card">
+          <div class="command-name">/summarize50</div>
+          <p class="command-description">Summarizes the last 50 messages in the current Discord channel, providing you
+            with the key points of the conversation.</p>
+          <div class="command-example">
+            User: /summarize50<br>
+            Bot: 📝 In, Alice mentioned the frontend is nearly done and will be finished by Friday. Bob highlighted
+            backend delays and asked Charlie to prioritize the auth APIs. Charlie shared updated Figma designs and
+            requested feedback by tomorrow. They plan to meet again on Thursday at 4 PM to follow up.
+          </div>
+        </div>
       </div>
-      <!-- <div class="w-full h-full">
-        
-      </div> -->
-    </div>  
+    </div>
+  </section>
 </body>
+
 </html>
